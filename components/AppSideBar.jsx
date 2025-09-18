@@ -29,7 +29,7 @@ const AppSideBar = () => {
 
   const handleClick = (title, url) => (e) => {
     e.preventDefault();
-    handleToast("pass", { name: `You're now viewing the ${title}` });
+    handleToast("pass", { name: `You're now navigating to the ${title} page` });
     router.push(url);
   };
 
