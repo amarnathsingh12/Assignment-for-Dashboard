@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { loaderStore } from "@/app/store";
+import { handleToast } from "./Toaster/page";
 
 const items = [
   { title: "Home", url: "/", icon: Home },
@@ -29,6 +30,11 @@ const AppSideBar = () => {
   const { loadingRoute, setLoadingRoute } = loaderStore()
   const handleClick = (title, url) => (e) => {
     e.preventDefault();
+    if (title === "Settings") {
+      handleToast("pass", {
+        name: `No Setting page`,
+      });
+    }
     setLoadingRoute(url)
     router.push(url);
   };
@@ -48,7 +54,7 @@ const AppSideBar = () => {
                       onClick={handleClick(item.title, item.url)}
                       className="flex items-center gap-2 "
                     >
-                      {loadingRoute === item.url ? (
+                      {(loadingRoute === item.url && item.title != "Settings") ? (
                         <Loader2 className="animate-spin !w-5 !h-5" />
                       ) : (
                         <item.icon className="!w-5 !h-5" />
