@@ -37,7 +37,7 @@ const AppSideBar = () => {
     <Sidebar collapsible="icon">
       <SidebarContent className="bg-gray-100 dark:bg-gray-900/50">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-2xl">DashBoard</SidebarGroupLabel>
+          {/* <SidebarGroupLabel className="text-2xl">DashBoard</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu className="mt-4 gap-2">
               {items.map((item) => (
