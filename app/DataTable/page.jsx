@@ -1,8 +1,11 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
 import { Loader2 } from "lucide-react"
+import { loaderStore } from "../store"
+import { usePathname } from "next/navigation"
+import { handleToast } from "@/components/Toaster/page"
 
 async function getData() {
     try {
@@ -19,6 +22,9 @@ async function getData() {
 export default function DemoPage() {
     const [data, setData] = useState([])
     const [loader, setLoader] = useState(false);
+    const { loadingRoute, clearLoadingRoute } = loaderStore();
+    const pathname = usePathname();
+    const showRef = useRef(false)
 
     useEffect(() => {
         setLoader(true)
@@ -27,6 +33,16 @@ export default function DemoPage() {
             setLoader(false)
         })
     }, [])
+
+    useEffect(() => {
+        if (loadingRoute && loadingRoute === pathname && !showRef.current) {
+            showRef.current = true;
+            clearLoadingRoute();
+            handleToast("pass", {
+                name: `You're now navigating to the Data Table page`,
+            });
+        }
+    }, [pathname, loadingRoute])
 
 
     return (

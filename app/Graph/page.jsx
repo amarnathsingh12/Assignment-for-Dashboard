@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -22,36 +22,39 @@ import {
     ChartTooltip,
     ChartTooltipContent
 } from "@/components/ui/chart";
+import { handleToast } from "@/components/Toaster/page";
+import { usePathname } from "next/navigation";
+import { loaderStore } from "../store";
 
 const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-  { month: "July", desktop: 188 },
-  { month: "August", desktop: 245 },
-  { month: "September", desktop: 198 },
-  { month: "October", desktop: 276 },
-  { month: "November", desktop: 162 },
-  { month: "December", desktop: 301 },
+    { month: "January", desktop: 186 },
+    { month: "February", desktop: 305 },
+    { month: "March", desktop: 237 },
+    { month: "April", desktop: 73 },
+    { month: "May", desktop: 209 },
+    { month: "June", desktop: 214 },
+    { month: "July", desktop: 188 },
+    { month: "August", desktop: 245 },
+    { month: "September", desktop: 198 },
+    { month: "October", desktop: 276 },
+    { month: "November", desktop: 162 },
+    { month: "December", desktop: 301 },
 ];
 
 
 const LineChartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-  { month: "July", desktop: 260, mobile: 150 },
-  { month: "August", desktop: 290, mobile: 160 },
-  { month: "September", desktop: 220, mobile: 140 },
-  { month: "October", desktop: 240, mobile: 155 },
-  { month: "November", desktop: 198, mobile: 165 },
-  { month: "December", desktop: 310, mobile: 180 },
+    { month: "January", desktop: 186, mobile: 80 },
+    { month: "February", desktop: 305, mobile: 200 },
+    { month: "March", desktop: 237, mobile: 120 },
+    { month: "April", desktop: 73, mobile: 190 },
+    { month: "May", desktop: 209, mobile: 130 },
+    { month: "June", desktop: 214, mobile: 140 },
+    { month: "July", desktop: 260, mobile: 150 },
+    { month: "August", desktop: 290, mobile: 160 },
+    { month: "September", desktop: 220, mobile: 140 },
+    { month: "October", desktop: 240, mobile: 155 },
+    { month: "November", desktop: 198, mobile: 165 },
+    { month: "December", desktop: 310, mobile: 180 },
 ];
 
 
@@ -67,6 +70,20 @@ const chartConfig = {
 }
 
 export default function ChartCards() {
+    const showRef = useRef(false);
+    const pathname = usePathname();
+    const {loadingRoute, clearLoadingRoute} = loaderStore()
+
+    useEffect(() => {
+        if (loadingRoute && loadingRoute === pathname && !showRef.current) {
+            showRef.current = true;
+            clearLoadingRoute();
+            handleToast("pass", {
+                name: `You're now navigating to the Data Table page`,
+            });
+        }
+    }, [pathname, loadingRoute])
+
     return (
         <section aria-label="Charts" className="w-full  m-2">
             <div className="grid gap-4 grid-cols-1">
@@ -128,7 +145,7 @@ export default function ChartCards() {
                                         right: 12,
                                     }}
                                 >
-                                    <CartesianGrid vertical={false}/>
+                                    <CartesianGrid vertical={false} />
                                     <XAxis
                                         dataKey="month"
                                         tickLine={false}

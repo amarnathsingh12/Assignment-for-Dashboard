@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import {
   Tabs,
@@ -8,8 +8,26 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import { usePathname } from "next/navigation";
+import { loaderStore } from "./store";
+import { handleToast } from "@/components/Toaster/page";
 
 export default function HomePage() {
+
+  const showRef = useRef(false);
+  const pathname = usePathname();
+  const { loadingRoute, clearLoadingRoute } = loaderStore()
+
+  useEffect(() => {
+    if (loadingRoute && loadingRoute === pathname && !showRef.current) {
+      showRef.current = true;
+      clearLoadingRoute();
+      handleToast("pass", {
+        name: `You're now navigating to the Home page`,
+      });
+    }
+  }, [pathname, loadingRoute])
+
   return (
     <div className="flex justify-center  min-h-screen">
       <Tabs defaultValue="homepage" className="w-full  pt-2">
