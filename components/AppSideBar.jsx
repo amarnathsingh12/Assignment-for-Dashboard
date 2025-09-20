@@ -28,6 +28,7 @@ const AppSideBar = () => {
   const router = useRouter();
 
   const handleClick = (title, url) => (e) => {
+    console.log("first")
     e.preventDefault();
     handleToast("pass", { name: `You're now navigating to the ${title} page` });
     router.push(url);
@@ -37,7 +38,7 @@ const AppSideBar = () => {
     <Sidebar collapsible="icon">
       <SidebarContent className="bg-gray-100 dark:bg-gray-900/50">
         <SidebarGroup>
-          {/* <SidebarGroupLabel className="text-2xl">DashBoard</SidebarGroupLabel> */}
+          <SidebarGroupLabel className="text-2xl">DashBoard</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="mt-4 gap-2">
               {items.map((item) => (
