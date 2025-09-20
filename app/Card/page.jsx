@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -11,6 +11,9 @@ import {
   ArrowUpRight,
   ArrowDownRight,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { handleToast } from "@/components/Toaster/page";
+import { loaderStore } from "../store";
 
 const data = [
   {
@@ -56,6 +59,20 @@ const data = [
 ];
 
 export default function SummaryCard() {
+  const {loadingRoute, clearLoadingRoute} = loaderStore();
+  const pathname = usePathname();
+  const shownRef = useRef(false);
+
+  useEffect(()=> {
+    if(loadingRoute && loadingRoute === pathname && !shownRef.current){
+      shownRef.current = true
+      clearLoadingRoute();
+      handleToast("pass", {
+      name: `You're now navigating to the Card page`,
+    });
+    }
+  }, [pathname, loadingRoute])
+
   return (
     <section aria-label="Key metrics" className="w-full my-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

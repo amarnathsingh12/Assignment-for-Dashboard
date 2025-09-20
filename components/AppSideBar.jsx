@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react";
-import { ChartArea, Home, IdCard, Settings, Table } from "lucide-react";
+import { ChartArea, Home, IdCard, Loader2, Settings, Table } from "lucide-react";
 
 import {
   Sidebar,
@@ -14,23 +14,22 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
-import { handleToast } from "./Toaster/page";
+import { loaderStore } from "@/app/store";
 
 const items = [
   { title: "Home", url: "/", icon: Home },
   { title: "Card Section", url: "/Card", icon: IdCard },
-  { title: "Graph", url: "/Graph", icon: ChartArea  },
+  { title: "Graph", url: "/Graph", icon: ChartArea },
   { title: "Data Table", url: "/DataTable", icon: Table },
   { title: "Settings", url: "#", icon: Settings },
 ];
 
 const AppSideBar = () => {
   const router = useRouter();
-
+  const { loadingRoute, setLoadingRoute } = loaderStore()
   const handleClick = (title, url) => (e) => {
-    console.log("first")
     e.preventDefault();
-    handleToast("pass", { name: `You're now navigating to the ${title} page` });
+    setLoadingRoute(url)
     router.push(url);
   };
 
@@ -49,7 +48,11 @@ const AppSideBar = () => {
                       onClick={handleClick(item.title, item.url)}
                       className="flex items-center gap-2 "
                     >
-                      <item.icon className="!w-5 !h-5" />
+                      {loadingRoute === item.url ? (
+                        <Loader2 className="animate-spin !w-5 !h-5" />
+                      ) : (
+                        <item.icon className="!w-5 !h-5" />
+                      )}
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>
